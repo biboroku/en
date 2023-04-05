@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name=”robots” content=”noindex,nofollow”>
+    <meta name=”description” content=”こんにちはー、僕の備忘録へようこそ”>
+    <meta name=”viewport” content=”width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover”>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <link rel="stylesheet" href=".././../style.css">
+    <title>ゼッケンドルフ表現計算機</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Sawarabi+Mincho" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Stick&display=swap" rel="stylesheet">
+    <script src="../../../main.js"></script>
+	<script src="//accaii.com/souta/script.js" async></script><noscript><img src="//accaii.com/souta/script?guid=on"></noscript>
+    <script>
+		function getZeckendorfSum() {
+			// Retrieve user input from HTML input field
+			var input = document.getElementById("input").value;
+
+			// Convert input to an integer and check if it is a positive number
+			var n = parseInt(input);
+			if (n <= 0) {
+				alert("Please enter a positive integer.");
+				return;
+			}
+
+			// Compute Zeckendorf's representation of n and the sum of its terms
+			var fib = [1, 2];  // First two Fibonacci numbers
+			var zeck = [];  // Zeckendorf's representation of n
+			var sum = 0;  // Sum of terms in Zeckendorf's representation
+
+			// Find the largest Fibonacci number that is less than or equal to n
+			var i = fib.length - 1;
+			while (fib[i] <= n) {
+				i++;
+				fib.push(fib[i - 1] + fib[i - 2]);
+			}
+
+			// Compute Zeckendorf's representation of n and its sum
+			while (n > 0) {
+				// Find the largest Fibonacci number that is less than or equal to n
+				while (fib[i] > n) {
+					i--;
+				}
+
+				// Add the corresponding term to Zeckendorf's representation and its sum
+				zeck.push(fib[i]);
+				sum += fib[i];
+				n -= fib[i];
+			}
+
+			// Display Zeckendorf's representation and its sum in the HTML output field
+			var output = document.getElementById("output");
+			output.innerHTML = "ゼッケンドルフの表現: " + zeck.join(" + ") + "<br>";
+			output.innerHTML += "合計: " + sum;
+		}
+	</script>
+</head>
+
+<body>
+        <div class="gradientheader">
+            <header><a href="../../../index.html" title="クリックするとトップページに戻ります"><font color="black">僕の備忘録!!!</font></a></header>
+        </div>
+        <div class="siro">
+            <h1>ゼッケンドルフ表現計算機</h1>
+            <p class="minmin">あらゆる自然数は異なる連続しないフィボナッチ数の和によって表せる. by Edouard Zeckendorf</p>
+            <input type="text" id="input">
+            <br>
+            <button onclick="getZeckendorfSum()">計算</button>
+            <p id="output"></p>
+        </div>
+</body>
+<div class="gradientfooter">
+    <header>©僕の備忘録!!!-2023</header>
+</div>

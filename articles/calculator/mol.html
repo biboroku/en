@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name=”robots” content=”noindex,nofollow”>
+    <meta name=”description” content=”こんにちはー、僕の備忘録へようこそ”>
+    <meta name=”viewport” content=”width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover”>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <link rel="stylesheet" href=".././../style.css">
+    <title>モル質量計算機</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Sawarabi+Mincho" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Stick&display=swap" rel="stylesheet">
+    <script src="../../../main.js"></script>
+    <script src="//accaii.com/souta/script.js" async></script><noscript><img src="//accaii.com/souta/script?guid=on"></noscript>
+</head>
+
+<body>
+        <div class="gradientheader">
+            <header><a href="../../../index.html" title="クリックするとトップページに戻ります"><font color="black">僕の備忘録!!!</font></a></header>
+        </div>
+        <div class="siro">
+            <h1>モル質量計算機</h1>
+            <p class="minmin">分子式を入力してください(カッコは展開してすべての原子に対して係数を明示してください):</p>
+            <input type="text" id="formulaInput" placeholder="例)H2O,NaCl">
+            <button onclick="calculateMolecularWeight()">計算</button>
+            <p id="result"></p>
+        
+            <script>
+                function calculateMolecularWeight() {
+                    const formula = document.getElementById("formulaInput").value;
+                    const elementRegex = /([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)/g;
+                    let totalWeight = 0;
+                    let match;
+                    let currentMultiplier = 1;
+                    const stack = [];
+        
+                    while (match = elementRegex.exec(formula)) {
+                        const element = match[1];
+                        const count = match[2] ? parseInt(match[2]) : 1;
+                        const openParenthesis = match[3];
+                        const closeParenthesis = match[4];
+                        const parenthesisMultiplier = match[5] ? parseInt(match[5]) : 1;
+        
+                        if (element) {
+                            const atomicWeight = getAtomicWeight(element);
+                            totalWeight += atomicWeight * count * currentMultiplier;
+                        } else if (openParenthesis) {
+                            stack.push(currentMultiplier);
+                            currentMultiplier *= parenthesisMultiplier;
+                        } else if (closeParenthesis) {
+                            currentMultiplier = stack.pop();
+                        }
+                    }
+        
+                    document.getElementById("result").textContent = `${formula} のモル質量は ${totalWeight.toFixed(2)} g/molです.`;
+                }
+        
+                function getAtomicWeight(element) {
+                    const atomicWeights = {
+                        "H": 1.008,
+                        "D": 2.014,
+                        "T": 3.016,
+                        "He": 4.003,
+                        "Li": 6.941,
+                        "Be": 9.012,
+                        "B": 10.81,
+                        "C": 12.01,
+                        "N": 14.01,
+                        "O": 16.00,
+                        "F": 19.00,
+                        "Ne": 20.18,
+                        "Na": 22.99,
+                        "Mg": 24.31,
+                        "Al": 26.98,
+                        "Si": 28.09,
+                        "P": 30.97,
+                        "S": 32.07,
+                        "Cl": 35.45,
+                        "K": 39.10,
+                        "Ca": 40.08,
+                        "Sc": 44.96,
+                        "Ti": 47.87,
+                        "V": 50.94,
+                        "Cr": 52.00,
+                        "Mn": 54.94,
+                        "Fe": 55.85,
+                        "Ni": 58.69,
+                        "Cu": 63.55,
+                        "Zn": 65.38,
+                        "Ga": 69.72,
+                        "Ge": 72.63,
+                        "As": 74.92,
+                        "Se": 78.96,
+                        "Br": 79.90,
+                        "Kr": 83.80,
+                        "Rb": 85.47,
+                        "Sr": 87.62,
+                        "Y": 88.91,
+                        "Zr": 91.22,
+                        "Nb": 92.91,
+                        "Mo": 95.94,
+                        "Tc": 98.00,
+                        "Ru": 101.1,
+                        "Rh": 102.9,
+                        "Pd": 106.4,
+                        "Ag": 107.9,
+                        "Cd": 112.4,
+                        "In": 114.8,
+                        "Sn": 118.7,
+                        "Sb": 121.8,
+                        "Te": 127.6,
+                        "I":  126.9,
+                        "Xe": 131.3,
+                        "Cs": 132.9,
+                        "Ba": 137.3,
+                        "La": 138.9,
+                        "Ce": 140.1,
+                        "Pr": 140.9,
+                        "Nd": 144.2,
+                        "Pm": 145.0,
+                        "Sm": 150.4,
+                        "Eu": 152.0,
+                        "Gd": 157.3,
+                        "Tb": 158.9,
+                        "Dy": 162.5,
+                        "Ho": 164.9,
+                        "Er": 167.3,
+                        "Tm": 168.9,
+                        "Yb": 173.1,
+                        "Lu": 175.0,
+                        "Hf": 178.5,
+                        "Ta": 180.9,
+                        "W":  183.8,
+                        "Re": 186.2,
+                        "Os": 190.2,
+                        "Ir": 192.2,
+                        "Pt": 195.1,
+                        "Au": 197.0,
+                        "Hg": 200.6,
+                        "Tl": 204.4,
+                        "Pb": 207.2,
+                        "Bi": 208.9,
+                        "Th": 232.0,
+                        "Pa": 231.0,
+                        "U":  238.0,
+                        "Np": 237.0,
+                        "Pu": 244.0,
+                        "Am": 243.0,
+                        "Cm": 247.0,
+                        "Bk": 247.0,
+                        "Cf": 251.0,
+                        "Es": 252.0,
+                        "Fm": 257.0,
+                        "Md": 258.0,
+                        "No": 259.0,
+                        "Lr": 262.0,
+                        "Rf": 267.0,
+                        "Db": 270.0,
+                        "Sg": 271.0,
+                        "Bh": 270.0,
+                        "Hs": 277.0,
+                        "Mt": 276.0,
+                        "Ds": 281.0,
+                        "Rg": 280.0,
+                        "Cn": 285.0,
+                        "Nh": 284.0,
+                        "Fl": 289.0,
+                        "Mc": 288.0,
+                        "Lv": 293.0,
+                        "Ts": 294.0,
+                        "Og": 294.0
+                    };
+                    return atomicWeights[element];
+                }
+            </script>
+            <p class="minmin">超重元素の原子量は推定値です.</p>
+        </div>
+</body>
+<div class="gradientfooter">
+    <header>©僕の備忘録!!!-2023</header>
+</div>
+</html>

@@ -1,0 +1,100 @@
+.gradientheader {
+    margin: 0px;
+    text-align:center;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(to right, #2af598 0%, #009efd 100%);
+    font-family: 'Stick', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    border-radius: 10pt;
+    vertical-align: middle;
+  }
+.gradientfooter {
+    margin: 0px;
+    text-align: right;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to right, #2af598 0%, #009efd 100%);
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 10pt;
+    vertical-align: middle;
+    font-family: 'Stick', sans-serif;
+  }
+* {
+    margin: 10px;
+    padding: 0;
+  }
+.minmin { font-family: 'Noto Sans JP', sans-serif; 
+          font-size: 140%;
+          text-indent: 0%;
+        }
+.siro {
+    background-color: #F4F5F7;
+    border-radius: 5pt;
+}
+   
+*{
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+body{
+    margin: 20px;
+}
+
+h1 {
+  width:fit-content;
+  list-style: 0.5;
+  position: relative;
+  padding: .7rem .7rem;
+}
+
+h1:before,
+h1:after {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  content: '';
+  background-image: -webkit-gradient(linear, right top, left top, from(#30cfd0), to(#330867));
+  background-image: -webkit-linear-gradient(right, #30cfd0 0%, #330867 100%);
+  background-image: linear-gradient(to left, #30cfd0 0%, #330867 100%);
+}
+
+h1:before {
+  top: 0;
+}
+
+h1:after {
+  bottom: 0;
+}
+
+hr {
+  border-top: 3px double #ccc;
+}
+
+ul {
+  padding: 0;
+  position: relative;
+}
+
+ul li {
+  color: black;
+  border-left: solid 8px orange;/*左側の線*/
+  background: whitesmoke;/*背景色*/
+  margin-bottom: 5px;/*下のバーとの余白*/
+  line-height: 1.3;
+  border-radius: 0 15px 15px 0;/*右側の角だけ丸く*/
+  padding: 0.5em;
+  list-style-type: none!important;
+}
+h2 {
+  /*線の種類（実線） 太さ 色*/
+  border-bottom: solid 3px black;
+  width: fit-content;
+}
