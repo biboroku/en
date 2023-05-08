@@ -1,143 +1,83 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="ja">
+<head>
     <meta charset="UTF-8">
-    <title>マインスイーパー</title>
-    <style>
-      .cell {
-        width: 20px;
-        height: 20px;
-        border: 1px solid #000;
-        text-align: center;
-        vertical-align: middle;
-        font-size: 16px;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <table id="board"></table>
-    <script>
-        const ROWS = 10;
-const COLS = 10;
-const MINES = 10;
-
-let board = [];
-let isGameOver = false;
-
-function initBoard() {
-  for (let row = 0; row < ROWS; row++) {
-    let rowArray = [];
-    for (let col = 0; col < COLS; col++) {
-      rowArray.push({
-        isMine: false,
-        isRevealed: false,
-        neighbors: 0
-      });
-    }
-    board.push(rowArray);
-  }
-
-  placeMines();
-  calculateNeighbors();
-}
-
-function placeMines() {
-  let minesPlaced = 0;
-  while (minesPlaced < MINES) {
-    let randomRow = Math.floor(Math.random() * ROWS);
-    let randomCol = Math.floor(Math.random() * COLS);
-    if (!board[randomRow][randomCol].isMine) {
-      board[randomRow][randomCol].isMine = true;
-      minesPlaced++;
-    }
-  }
-}
-
-function calculateNeighbors() {
-  for (let row = 0; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-      let cell = board[row][col];
-      if (!cell.isMine) {
-        cell.neighbors = countNeighbors(row, col);
-      }
-    }
-  }
-}
-
-function countNeighbors(row, col) {
-  let count = 0;
-  for (let r = row - 1; r <= row + 1; r++) {
-    for (let c = col - 1; c <= col + 1; c++) {
-      if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-        if (board[r][c].isMine) {
-          count++;
-        }
-      }
-    }
-  }
-  return count;
-}
-
-function revealCell(row, col) {
-  let cell = board[row][col];
-  if (cell.isRevealed || isGameOver) {
-    return;
-  }
-
-  cell.isRevealed = true;
-  if (cell.isMine) {
-    isGameOver = true;
-    alert("Game over!");
-  } else if (cell.neighbors === 0) {
-    revealNeighbors(row, col);
-  }
-
-  updateBoard();
-}
-
-function revealNeighbors(row, col) {
-  for (let r = row - 1; r <= row + 1; r++) {
-    for (let c = col - 1; c <= col + 1; c++) {
-      if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
-        let cell = board[r][c];
-        if (!cell.isMine && !cell.isRevealed) {
-          cell.isRevealed = true;
-          if (cell.neighbors === 0) {
-            revealNeighbors(r, c);
-          }
-        }
-      }
-    }
-  }
-}
-
-function updateBoard() {
-  let table = document.getElementById("board");
-  table.innerHTML = "";
-  for (let row = 0; row < ROWS; row++) {
-    let rowElement = document.createElement("tr");
-    for (let col = 0; col < COLS; col++) {
-      let cell = board[row][col];
-      let cellElement = document.createElement("td");
-      cellElement.classList.add("cell");
-      if (cell.isRevealed) {
-        if (cell.isMine) {
-          cellElement.textContent = "*";
-        } else if (cell.neighbors > 0) {
-          cellElement.textContent = cell.neighbors;
-        }
-      }
-      cellElement.addEventListener("click", function() {
-        revealCell(row, col);
-      });
-      rowElement.appendChild(cellElement);
-    }
-    table.appendChild(rowElement);
-  }
-}
-
-initBoard();
-    </script>
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="ms.css">
+</head>
+<body>
+    <div id="minesweeper">
+        <h1>Minesweeper</h1>
+        <div class="settings">
+            <select id="difficulty">
+                <option value="0">Easy</option>
+                <option value="1">Normal</option>
+                <option value="2">Hard</option>
+                <option value="3">SuperHard</option>
+                <option value="4">Super-SuperHard</option>
+            </select>
+            <button id="start">StartGame</button>
+        </div>
+        <div id="gameBoard"></div>
+        <h2 id="message"></h2>
+        <h2><span id="timer">0:00.00</span><br>
+            Number of Mines Left:<span id="remaining-mines">0</span></h2>
+    </div>
+    <div style="text-align: center;">
+        <button id="toggleInstructions">How to play?</button>
+        <div id="instructions" style="display: none;">
+          <p>
+            <strong>Minesweeper</strong> is a puzzle game where you open all cells on the board while avoiding mines. The goal of the game is to open all cells without mines.<br>
+            <br>
+            You can place a <strong>flag</strong> on a cell by right-clicking. Flags can be placed where you think there might be a mine. Cells with a flag will be marked with an "F" and will be locked to prevent accidental opening. Flags can be removed by right-clicking again.<br>
+            <br>
+            Each opened cell will display the number of mines in the 8 adjacent cells (nothing will be displayed if the number is 0). Left-click a cell with a number, and if there are the same number of flagged adjacent cells, the remaining cells will automatically open.<br>
+            <br>
+            The game can be played at 4 different difficulty levels. Each level - Beginner, Intermediate, Advanced, and Superhuman - has different board sizes and numbers of mines.<br>
+            <table border="1" align="center">
+                <tr>
+                  <th>Difficulty</th>
+                  <th>Rows</th>
+                  <th>Columns</th>
+                  <th>Number of Mines</th>
+                </tr>
+                <tr>
+                  <td>Beginner</td>
+                  <td>9</td>
+                  <td>9</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>Intermediate</td>
+                  <td>16</td>
+                  <td>16</td>
+                  <td>40</td>
+                </tr>
+                <tr>
+                  <td>Advanced</td>
+                  <td>16</td>
+                  <td>30</td>
+                  <td>99</td>
+                </tr>
+                <tr>
+                  <td>Super Advanced</td>
+                  <td>50</td>
+                  <td>50</td>
+                  <td>500</td>
+                </tr>
+                <tr>
+                  <td>Ultra Advanced</td>
+                  <td>100</td>
+                  <td>100</td>
+                  <td>2000</td>
+                </tr>
+              </table><br>
+            <br>
+            To start the game, select the difficulty and click the "Start Game" button. The first cell you open is programmed to always be free of mines. To reset the board, click the "Start Game" button again.
+        </p>
+        </div>
+    </div>
+    <script src="ms.js"></script>
+</body>
 </html>
