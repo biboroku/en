@@ -28,9 +28,9 @@
         <div class="siro">
             <h1>Differential calculator</h1>
             <p class="minmin">Enter an explicit function with variable x.</p>
-            <input type="text" id="inputFunction">
-            <button onclick="differentiate()">Differentiate</button>
-            <p id="result"></p>
+            <p class="minmin" style="display: inline;">f(x)=</p><input class="minmin" type="text" id="inputFunction">
+            <button onclick="differentiate()" class="minmin">Differentiate</button>
+            <p id="result" class="minmin"></p>
 
             <script>
                 function differentiate() {
